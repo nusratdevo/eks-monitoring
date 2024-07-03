@@ -7,17 +7,17 @@ EKS monitoring using Helm, Prometheus and Grafana Dashboard for pull and collect
 ## Tools Used:
 
 * AWS Account
+* AWS CLI, kubectl, eksctl & Helm
 * Jenkins
 * Docker & Dockerhub
 * Github
-* terraform
 * Prometheus & Grafana
 * eks cluster
 
 ## Steps to complete project: 
 
 1. setup IAM user and Configure AWS Credentials
-2. Setup EC2 instance with IAM Rol with administration access
+2. Setup EC2 instance with IAM Role with administration access
 3. Install and setup AWS CLI, kubectl, eksctl, Helm Charts
 4. Creating an Amazon EKS cluster
 5. Add Prometheus Helm repo
@@ -31,13 +31,13 @@ EKS monitoring using Helm, Prometheus and Grafana Dashboard for pull and collect
 - Generate Security Credentials: Access Key and Secret Access Key.
 
 ### Step 2: EC2 Setup
-- Launch a t2 medium Ubuntu instance in a favourite region (eg. region `us-east-1`).
--  sg expose port 80,22, 443,9090, 8080, 3000  port 
+- Launch a t2.medium Ubuntu instance in a favourite region (eg. region `us-east-1`).
+-  sg expose port 80,22, 443,9090, 8080 & 3000 
 - SSH into the instance from your local machine.
 
 ### Step 3: clone repo
 ```shell
-git clone https://github.com/nusratdevo/monitoring-app-cicd
+git clone https://github.com/nusratdevo/eks-monitoring
 ```
 
 ### Step 4: install tools
@@ -57,16 +57,18 @@ helm version
 ```
 
 
-### Step: Install EKS cluster using eksctl & verifying cluster is running
+### Step: Install EKS cluster using eksctl
 ```shell 
 eksctl create cluster --name eks2 --region us-east-1 --nodegroup-name eks4-nodes --node-type t3.small --managed --nodes 2 --nodes-min 2 --nodes-max 3 
 ```
-*  Cluster Name: — eks4, nodegroup-name:- eks4-nodes
-* Region:— region us-east-1
+*  Cluster Name:  eks4, nodegroup-name:- eks4-nodes
+* Region:         region us-east-1
 -  it would take 15–20 minutes for this installation to complete.
 
 
 ### Step: verify the cluster creation
+![eks-cluster.webp](image/eks-cluster.webp)
+
 - We can verify the cluster by logging into the AWS EKS Console dashboard itself
 - We also verify EKS cluster is up and running in commandline by the following command
 
@@ -103,6 +105,7 @@ helm install stable prometheus-community/kube-prometheus-stack -n prometheus
 ```
 - To check whether Prometheus is installed or not use the below command
 ``` kubectl get pods -n prometheus ```
+
 ![promethius-pods.webp](image/promethius-pods.webp)
 
 - check the services file (svc) of the Prometheus
@@ -111,7 +114,7 @@ helm install stable prometheus-community/kube-prometheus-stack -n prometheus
 ![service.webp](image/service.webp)
 Grafana will be coming along with Prometheus as the stable version
 
-### step: Exposing Prometheus and Grafan to the external world
+### Steps: Exposing Prometheus and Grafan to the external world
 - We change service type in svc file from ClusterIP to LoadBalancer
 ``` kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus ```
 - verifiying attached LoadBalancer to svc file
@@ -130,7 +133,7 @@ kubectl edit svc stable-grafana -n prometheus
 ``` kubectl get svc -n prometheus ```
 - access Grafana LoadBalancer in the browser
 
-![grafana.webp](image/grafana.webp)
+ 
 
 - create grafana password
 ```shell
@@ -147,6 +150,15 @@ echo PROM_PWD
 * Copy id and load it : 17119
 * uses a Prometheus dashboard number: 15760
 * And select the data source Prometheus and import it.
+
+![prom-data-source.webp](image/prom-data-source.webp)
+---
+
+![eks-datasource.webp](image/eks-datasource.webp)
+---
+![eks-dashboard.webp](image/eks-dashboard.webp)
+---
+
 * Entire data of the cluster: where we can able to see the entire data of the EKS cluster
      - CPU and RAM use
      - pods in a specific namespace
@@ -172,14 +184,7 @@ kubectl get svc
 ```shell
 eksctl delete cluster --name eks2
 ```
-### Step 6: Open jenkins in browser, login and install tools
-``` shell
-Open jenkins on port <EC2 Public_IP>:8080
-administrative password : sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-```
+- We do EKS Monitoring using Prometheus and Grafana with the help of AWS CLI, kubectl, eksctl and helm utility.
 
-### step 7: Set up Docker Hub credentials:
-- Goto Jenkins Dashboard → Manage Jenkins → Credentials → system → Global credentials (unrestricted)→ Add username with password.
-- kind(username with password)->username(dockerhub username)->password(dockerhub pass)->Id(dockerHub)
 
 
