@@ -1,4 +1,4 @@
-# Monitoring Project : monitoring EKS Cluster
+# Monitoring Project: monitoring EKS Cluster
 EKS monitoring using Helm, Prometheus and Grafana Dashboard for pull and collects metrics from targets by scraping metrics HTTP endpoints.Monitoring is needed to Understand the state of your infrastructure and systems is essential for ensuring the reliability and stability of services.
 
 ### Monitoring Project Diagram:
