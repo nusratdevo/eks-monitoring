@@ -133,7 +133,8 @@ kubectl edit svc stable-grafana -n prometheus
 ``` kubectl get svc -n prometheus ```
 - access Grafana LoadBalancer in the browser
 
- 
+ ![grafana.jpg](image/grafana.jpg)
+---
 
 - create grafana password
 ```shell
@@ -154,9 +155,9 @@ echo PROM_PWD
 ![prom-data-source.webp](image/prom-data-source.webp)
 ---
 
-![eks-datasource.webp](image/eks-datasource.webp)
+![eks-datasource.jpg](image/eks-datasource.jpg)
 ---
-![eks-dashboard.webp](image/eks-dashboard.webp)
+![eks-dashboard.jpg](image/eks-dashboard.jpg)
 ---
 
 * Entire data of the cluster: where we can able to see the entire data of the EKS cluster
